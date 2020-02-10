@@ -1,0 +1,25 @@
+{
+  "name": "ogc-web",
+  "private": true,
+  "workspaces": [
+    "app"
+  ],
+  "prettier": {
+    "semi": false,
+    "singleQuote": false,
+    "tabWidth": 2,
+    "trailingComma": "es5"
+  },
+  "scripts": {
+    "build": "yarn workspace ogc-web-app build",
+    "dev": "yarn workspace ogc-web-app start"
+  },
+  "devDependencies": {
+    "@types/jest": "^25.1.2",
+    "@types/node": "^13.7.0",
+    "husky": "^4.2.1",
+    "lint-staged": "^10.0.7",
+    "prettier": "^1.19.1",
+    "typescript": "^3.7.5"
+  }
+}
