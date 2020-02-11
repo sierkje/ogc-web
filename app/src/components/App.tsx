@@ -4,7 +4,7 @@ import './App.css'
 import { css, jsx, keyframes } from '@emotion/core'
 import React from 'react'
 
-import logo from './logo.svg'
+import logo from '../images/logo.svg'
 
 const wrapperCss = css`
   text-align: center;
