@@ -1,63 +1,33 @@
-/** @jsx jsx */
-import './App.css'
-
-import { css, jsx, keyframes } from '@emotion/core'
 import React from 'react'
+import { BrowserRouter, Route, Switch } from 'react-router-dom'
 
-import logo from '../images/logo.svg'
+import routes from '../constants/routes'
+import AccessProvider from './AccessProvider'
+import Home from './Home'
+import Layout from './Layout'
+import NotFound from './NotFound'
 
-const wrapperCss = css`
-  text-align: center;
-`
-const logoSpin = keyframes`
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-`
-const logoCss = css`
-  height: 40vmin;
-  pointer-events: none;
-  @media (prefers-reduced-motion: no-preference) {
-    animation: ${logoSpin} infinite 20s linear;
-  }
-`
-const headerCss = css`
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-`
-const linkCss = css`
-  color: #61dafb;
-}
-`
+const ROUTES = Object.keys(routes).map(id => ({ id, ...routes[id] }))
 
 const App: React.FC = () => {
   return (
-    <div css={wrapperCss}>
-      <header css={headerCss}>
-        <img src={logo} css={logoCss} alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          css={linkCss}
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <AccessProvider>
+      <BrowserRouter>
+        <Layout>
+          <Switch>
+            {ROUTES.map(({ id, path, component, exact = false }) => (
+              <Route key={id} path={path} component={component} exact={exact} />
+            ))}
+            <Route key="home" path={['/', '/index.html', '/index.htm']} exact>
+              <Home />
+            </Route>
+            <Route key={404}>
+              <NotFound />
+            </Route>
+          </Switch>
+        </Layout>
+      </BrowserRouter>
+    </AccessProvider>
   )
 }
 
