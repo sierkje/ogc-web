@@ -1,0 +1,12 @@
+{
+  "name": "ogc-web-server",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./build",
+  "babel": {
+    "extends": "../config/babel.json"
+  },
+  "dependencies": {
+    "express": "^4.17.1"
+  }
+}
