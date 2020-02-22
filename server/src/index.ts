@@ -1,44 +1,84 @@
-import express, { Express } from 'express'
+import { Express } from 'express'
 import { existsSync } from 'fs'
-import { request } from 'http'
 import { join as pathJoin } from 'path'
 
-interface Props {
-  apiServer: {
-    applyMiddleware: (props: { app: Express }) => void
-    graphqlPath: string
-  }
-  isDev?: boolean
+// @ts-check
+const express = require('express')
+
+interface ApiServer {
+  applyMiddleware: (props: { app: Express }) => void
+  apiPath: () => string
 }
 
-const APP_PATH = pathJoin(__dirname, '..', 'app', 'build', 'index.html')
+type OnListen = (port: number) => void
 
-export function createServer({ apiServer, isDev = false }: Props) {
-  const IS_DEV = isDev || !existsSync(APP_PATH)
-  const IS_PROD = !IS_DEV
-  const PORT = IS_DEV ? 4000 : 80
+interface StartOptions {
+  isDev?: boolean
+  onListen?: OnListen
+}
 
-  const app = express()
+let SERVER: Express | false = false
+let API_SERVER: ApiServer | false = false
+let ON_LISTEN: OnListen = function noop() {}
 
-  apiServer.applyMiddleware({ app })
+function isDevServer() {
+  return process.env.SERVER_ENV === 'development'
+}
 
-  if (IS_PROD) {
-    app.use('*', express.static(APP_PATH))
+function getPort(): number {
+  return isDevServer() ? 4000 : 80
+}
+
+function createServer() {
+  if (SERVER) {
+    return SERVER
   }
 
-  if (IS_DEV) {
-    app.get('*', (req, res) => {
-      const appUrl = `http://localhost:3000${req.url}`
-      request(appUrl).pipe(res)
-    })
+  SERVER = express() as Express
+
+  if (API_SERVER) {
+    API_SERVER.applyMiddleware({ app: SERVER })
   }
 
-  return app.listen({ port: PORT }, () => {
-    if (IS_DEV) {
-      const { graphqlPath } = apiServer
-      console.log(
-        `API server started on http://localhost:${PORT}${graphqlPath}`
-      )
+  if (!isDevServer()) {
+    const appPath = pathJoin(__dirname, '..', 'app', 'build', 'index.html')
+    if (existsSync(appPath)) {
+      SERVER.use('*', express.static(appPath))
     }
-  })
+  }
+
+  return SERVER
+}
+
+function startServer(onListen: OnListen = ON_LISTEN) {
+  const server = createServer()
+  const port = getPort()
+  ON_LISTEN = onListen
+
+  server.listen(port, () => ON_LISTEN(port))
+}
+
+function stopServer() {
+  SERVER = false
+  return { start: startServer }
+}
+
+function restartServer(onListen?: OnListen) {
+  stopServer().start(onListen)
+  return { stop: stopServer, restart: restartServer }
+}
+
+export default {
+  start: (
+    apiServer: ApiServer,
+    { isDev = false, onListen }: StartOptions = {}
+  ) => {
+    if (isDev) {
+      process.env.SERVER_ENV = 'development'
+    }
+    API_SERVER = apiServer
+    startServer(onListen)
+
+    return { stop: stopServer, restart: restartServer }
+  },
 }

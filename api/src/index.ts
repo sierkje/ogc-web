@@ -12,24 +12,13 @@ interface ApplyMiddleware extends ServerRegistration {
 }
 interface ApiServer {
   applyMiddleware: (config: ApplyMiddleware) => void
-  apiPath: ApolloServer['graphqlPath']
+  apiPath: () => ApolloServer['graphqlPath']
 }
 
 let SERVER: ApolloServer | null = null
-let SERVER_HAS_MIDDLEWARE: boolean = false
 
-function needsMiddleware() {
-  return !!SERVER && !SERVER_HAS_MIDDLEWARE
-}
-
-function applyMiddleware({ path, ...config }: ApplyMiddleware): void {
-  if (needsMiddleware) {
-    SERVER.applyMiddleware({ ...config, path: 'api' })
-  }
-}
-
-export default function createApiServer({
-  enablePlayground = false,
+export function createApiServer({
+  enablePlayground = true,
 }: ApiServerConfig): ApiServer {
   if (SERVER === null) {
     const config: ApolloServerExpressConfig = {
@@ -41,7 +30,13 @@ export default function createApiServer({
     SERVER = new ApolloServer(config)
   }
 
-  const apiPath = SERVER.graphqlPath
-
-  return { applyMiddleware, apiPath }
+  return {
+    applyMiddleware: function applyMiddleware({
+      path: _,
+      ...config
+    }: ApplyMiddleware): void {
+      SERVER!.applyMiddleware({ ...config, path: '/api' })
+    },
+    apiPath: () => SERVER!.graphqlPath,
+  }
 }

@@ -1,10 +1,11 @@
 /** @jsx jsx */
 
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { Link, NavLink } from 'react-router-dom'
 
 import { css, Global, jsx } from '@emotion/core'
 
+import routes from '../constants/routes'
 import site from '../constants/site'
 import colors from '../constants/theme/colors'
 import fonts from '../constants/theme/fonts'
@@ -12,9 +13,25 @@ import normalizeCss from '../constants/theme/normalizeCss'
 import pxToRem from '../helpers/pxToRem'
 import useGoogleFont from '../hooks/useGoogleFont'
 
+const menuItems = Object.keys(routes)
+  .map(key => ({ key, ...routes[key] }))
+  .reduce<{ key: string; to: string; weight: number; label: string }[]>(
+    (items, { key, path, menu }) => {
+      if (!menu || !path) {
+        return items
+      }
+      return [
+        ...items,
+        { key, to: path, label: menu.label, weight: menu.weight },
+      ]
+    },
+    []
+  )
+  .sort((a, b) => a.weight - b.weight)
+
 const PX = {
   gutter: 10,
-  header: { height: 40, fontSize: 24 },
+  header: { height: 40, fontSize: 20 },
   navbar: {},
 }
 
@@ -39,9 +56,10 @@ const styles = {
   branding: css`
     display: inline;
     font-family: ${fonts.body.family};
+    font-size: 1.2em;
     grid-area: ${GRID_AREAS.branding};
     letter-spacing: -0.1rem;
-    margin: 0;
+    margin: 0 1rem 0 0;
     padding: 0;
   `,
   global: css`
@@ -74,6 +92,7 @@ const styles = {
   header: css`
     background-color: ${colors.blueDark};
     color: ${colors.white};
+    font-size: ${REM.header.fontSize};
     height: ${REM.header.height};
     left: 0;
     margin: 0;
@@ -91,13 +110,18 @@ const styles = {
   menu: css`
     display: grid;
     grid-area: ${GRID_AREAS.menu};
-    grid-template-columns: auto 1fr;
+    grid-template-columns: repeat(${menuItems.length + 1}, auto) 1fr;
     grid-template-rows: 1fr;
     list-style: none;
     list-style-image: none;
     list-style-type: none;
     margin: 0;
     padding: 0;
+  `,
+  menuItem: css`
+    display: inline-block;
+    margin: 0;
+    padding: 0 ${REM.gutter};
   `,
   navbar: css`
     display: grid;
@@ -109,19 +133,38 @@ const styles = {
     padding: 0;
   `,
   navlink: css`
-    display: block;
+    display: inline-block;
     color: ${colors.white};
-    font-size: ${REM.header.fontSize};
     margin: 0;
     padding: ${REM.header.padding.y} ${REM.gutter};
     text-decoration: none;
+
+    &[aria-current] {
+      color: ${colors.black};
+      background-color: ${colors.blueLight};
+    }
   `,
 }
 
 const Menu: React.FC = () => {
   return (
     <ul css={styles.menu}>
-      <li>Hello</li>
+      {menuItems.map(({ weight, label, ...props }) => (
+        <li css={styles.menuItem}>
+          <NavLink {...props} css={styles.navlink}>
+            {label}
+          </NavLink>
+        </li>
+      ))}
+      {process.env.NODE_ENV === 'development' && (
+        <li css={styles.menuItem}>
+          <NavLink to="/graphql" css={styles.navlink}>
+            <span aria-label="API playground" role="img">
+              🚀
+            </span>
+          </NavLink>
+        </li>
+      )}
     </ul>
   )
 }
@@ -136,11 +179,11 @@ const Layout: React.FC = ({ children }) => {
       <header css={styles.header} role="banner">
         <div css={styles.navbar}>
           <h1 css={styles.branding}>
-            <NavLink to="/" css={styles.navlink}>
+            <Link to="/" css={styles.navlink}>
               {site.name}
-            </NavLink>
-            <Menu />
+            </Link>
           </h1>
+          <Menu />
         </div>
       </header>
       <main id="main-content" css={styles.main}>
