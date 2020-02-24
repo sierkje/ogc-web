@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 
 import { css, jsx } from '@emotion/core'
 
-import pxToRem from '../helpers/pxToRem'
+import pxToRem from '../../helpers/pxToRem'
 
 const topRem = pxToRem(40)
 

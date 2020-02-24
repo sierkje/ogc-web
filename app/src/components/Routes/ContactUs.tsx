@@ -1,7 +1,7 @@
 import React from 'react'
 
-import site from '../constants/site'
-import Page from './Page'
+import site from '../../constants/site'
+import Page from './shared/Page'
 
 const ContactUs: React.FC = () => {
   return (

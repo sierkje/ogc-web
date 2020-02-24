@@ -7,7 +7,7 @@ import { useQuery } from '@apollo/react-hooks'
 import { css, jsx } from '@emotion/core'
 
 import NotFound from './NotFound'
-import Page from './Page'
+import Page from './shared/Page'
 
 interface GetPostsQuery {
   getPosts: {

@@ -1,7 +1,7 @@
-import AboutUs from '../components/AboutUs'
-import Blog from '../components/Blog'
-import ContactUs from '../components/ContactUs'
-import Resources from '../components/Resources'
+import AboutUs from '../components/Routes/AboutUs'
+import Blog from '../components/Routes/Blog'
+import ContactUs from '../components/Routes/ContactUs'
+import Resources from '../components/Routes/Resources'
 
 interface Route {
   path?: string

@@ -4,7 +4,7 @@ import React from 'react'
 
 import { css, jsx } from '@emotion/core'
 
-import useSeoTitle from '../hooks/useSeoTitle'
+import useSeoTitle from '../../../hooks/useSeoTitle'
 
 const TITLE_CSS = css``
 

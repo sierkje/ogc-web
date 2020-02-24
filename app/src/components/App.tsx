@@ -6,10 +6,10 @@ import { ApolloProvider } from '@apollo/react-hooks'
 
 import routes from '../constants/routes'
 import AccessProvider from './AccessProvider'
-import ApiPlayground from './ApiPlayground'
-import Home from './Home'
 import Layout from './Layout'
-import NotFound from './NotFound'
+import ApiPlayground from './Routes/ApiPlayground'
+import Home from './Routes/Home'
+import NotFound from './Routes/NotFound'
 
 const ROUTES = Object.keys(routes).map(id => ({ id, ...routes[id] }))
 
