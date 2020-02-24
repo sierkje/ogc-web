@@ -9,36 +9,43 @@ import { css, jsx } from '@emotion/core'
 import NotFound from './NotFound'
 import Page from './Page'
 
-const BLOG_POSTS = gql`
+interface GetPostsQuery {
+  getPosts: {
+    hasMore: boolean
+    last: string | null
+    posts: { title?: string; id: string; slug: string; body: string }[]
+  }
+}
+
+const GET_POSTS_QUERY = gql`
   {
-    getBlogPosts(count: 5) {
+    getPosts(count: 5) {
       hasMore
       last
       posts {
-        id
-        title
-        slug
         body
+        id
+        slug
+        title
       }
     }
   }
 `
 
 const Home: React.FC = () => {
-  const { loading, error, data } = useQuery<{
-    getBlogPosts: {
-      hasMore: boolean
-      last: string | null
-      posts: { title?: string; id: string; slug: string; body: string }[]
-    }
-  }>(BLOG_POSTS)
+  const { loading, error, data } = useQuery<GetPostsQuery>(GET_POSTS_QUERY)
 
   if (error) {
     return <NotFound />
   }
 
-  if (data) {
-    console.log(data.getBlogPosts)
+  if (process.env.NODE_ENV === 'development') {
+    if (data) {
+      console.log(data.getPosts)
+    }
+    if (error) {
+      console.error(error)
+    }
   }
 
   return (
@@ -52,7 +59,7 @@ const Home: React.FC = () => {
             margin: 0;
           `}
         >
-          {data!.getBlogPosts.posts.map(({ title, id, slug, body }) => (
+          {data!.getPosts.posts.map(({ body, id, slug, title }) => (
             <li key={id}>
               <article
                 css={css`
