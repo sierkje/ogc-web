@@ -1,7 +1,7 @@
 import { fork } from 'child_process'
 import { join as pathJoin } from 'path'
 
-import { createApiServer } from '../../api/src/index'
+import { createApiServer } from '../../server/src/api/index'
 import server from '../../server/src/index'
 import { clean } from './clean'
 import { APP } from './workspaces'

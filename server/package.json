@@ -4,9 +4,19 @@
   "private": true,
   "main": "./build",
   "babel": {
-    "extends": "../.config/babel.json"
+    "presets": [
+      "@babel/env",
+      "@babel/preset-typescript"
+    ],
+    "plugins": [
+      "@babel/proposal-class-properties",
+      "@babel/proposal-object-rest-spread"
+    ]
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "apollo-server-express": "^2.10.1",
+    "express": "^4.17.1",
+    "graphql": "^14.6.0",
+    "ramda": "^0.27.0"
   }
 }

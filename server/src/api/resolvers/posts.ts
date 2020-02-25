@@ -1,6 +1,6 @@
 import { IResolvers } from 'apollo-server-express'
 
-import paginate from '../helpers/paginate'
+import paginate from '../../helpers/paginate'
 
 interface PostContent {
   body: string

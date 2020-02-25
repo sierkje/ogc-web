@@ -1,14 +1,12 @@
 // @ts-check
 
 function startProductionServer() {
-  process.env.NODE_ENV = 'production'
-
   console.clear()
   console.log('Starting the production server.')
   console.log()
 
   //@ts-ignore
-  const { createApiServer } = require('../../api')
+  const { createApiServer } = require('../../server/api')
   const apiServer = createApiServer({
     enablePlayground: false,
   })
