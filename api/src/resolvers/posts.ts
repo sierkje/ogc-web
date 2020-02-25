@@ -1,4 +1,4 @@
-import { IResolvers, IResolversParameter } from 'apollo-server-express'
+import { IResolvers } from 'apollo-server-express'
 
 import paginate from '../helpers/paginate'
 
@@ -30,21 +30,18 @@ async function findPost(slug: string): Promise<Post | null> {
 }
 
 async function getPostArray(): Promise<Post[]> {
-  if (!CACHE.posts) {
-    // CACHE.posts = Object.keys(DATA).reduce<Post[]>((posts, slug) => {
-    //   const post = findPost(slug)
-
-    //   return post ? [...posts, post] : posts
-    // }, [])
-    Object.keys(DATA).forEach(async slug => {
-      const post = await findPost(slug)
-      if (post) {
-        CACHE.posts = [...(CACHE.posts || []), post]
-      }
-    })
+  if (CACHE.posts) {
+    return CACHE.posts
   }
 
-  return CACHE.posts!
+  const posts = await Promise.all(
+    Object.keys(DATA).map(
+      async (slug): Promise<Post> => ({ ...DATA[slug], slug, id: slug })
+    )
+  )
+
+  CACHE.posts = posts
+  return posts
 }
 
 // Provide resolver functions for your schema fields

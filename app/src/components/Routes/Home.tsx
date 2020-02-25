@@ -12,7 +12,7 @@ import Page from './shared/Page'
 interface GetPostsQuery {
   getPosts: {
     hasMore: boolean
-    last: string | null
+    lastId: string | null
     posts: { title?: string; id: string; slug: string; body: string }[]
   }
 }
@@ -21,7 +21,7 @@ const GET_POSTS_QUERY = gql`
   {
     getPosts(count: 5) {
       hasMore
-      last
+      lastId
       posts {
         body
         id
