@@ -13,11 +13,11 @@
     "trailingComma": "es5"
   },
   "scripts": {
-    "build": "./bin/build",
-    "clean": "./bin/clean",
-    "dev": "./bin/dev",
-    "buildAndServe": "./bin/buildAndServe",
-    "serve": "./bin/serve"
+    "build": "./.bin/build",
+    "clean": "./.bin/clean",
+    "dev": "./.bin/dev",
+    "buildAndServe": "./.bin/buildAndServe",
+    "serve": "./.bin/serve"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",

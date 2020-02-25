@@ -4,7 +4,7 @@
   "private": true,
   "main": "./build",
   "babel": {
-    "extends": "../config/babel.json"
+    "extends": "../.config/babel.json"
   },
   "dependencies": {
     "apollo-server-express": "^2.10.1",
