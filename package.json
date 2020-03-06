@@ -5,6 +5,21 @@
     "app",
     "server"
   ],
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "./eslint.config.js.json",
+      "prettier",
+      "prettier/babel"
+    ],
+    "env": {
+      "es6": true,
+      "node": true
+    },
+    "rules": {
+      "prettier/prettier": "error"
+    }
+  },
   "prettier": {
     "semi": false,
     "singleQuote": true,
@@ -12,11 +27,15 @@
     "trailingComma": "es5"
   },
   "scripts": {
-    "build": "./.bin/build",
-    "clean": "./.bin/clean",
-    "dev": "./.bin/dev",
-    "buildAndServe": "./.bin/buildAndServe",
-    "serve": "./.bin/serve"
+    "build": "./.bin/run build",
+    "build-then-serve": "./.bin/run serve --build",
+    "build:app": "./.bin/run build --app",
+    "build:server": "./.bin/run build --server",
+    "clean": "./.bin/run clean",
+    "prepare-db": "./.bin/run prepare-db",
+    "dev": "./.bin/run dev",
+    "serve": "./.bin/run serve",
+    "test": "./.bin/run test"
   },
   "devDependencies": {
     "@babel/cli": "^7.8.4",
@@ -30,25 +49,38 @@
     "@testing-library/react": "^9.4.0",
     "@testing-library/user-event": "^10.0.0",
     "@types/cross-spawn": "^6.0.1",
+    "@types/express-session": "^1.17.0",
     "@types/jest": "^25.1.2",
     "@types/node": "^13.7.0",
+    "@types/ramda": "^0.26.43",
     "@types/react": "^16.9.0",
+    "@types/react-dev-utils": "^9.0.4",
     "@types/react-dom": "^16.9.0",
     "@types/react-helmet": "^5.0.15",
     "@types/react-router-dom": "^5.1.3",
     "@types/rimraf": "^2.0.3",
+    "@types/webpack-env": "^1.15.1",
+    "@types/webpack-node-externals": "^1.7.1",
+    "@typescript-eslint/eslint-plugin": "2.x",
+    "@typescript-eslint/parser": "2.x",
+    "babel-eslint": "10.x",
+    "clean-webpack-plugin": "^3.0.0",
     "cross-spawn": "^7.0.1",
     "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.10.0",
+    "eslint-plugin-babel": "^5.3.0",
     "eslint-plugin-emotion": "^10.0.27",
-    "eslint-plugin-flowtype": "3.x",
+    "eslint-plugin-import": "2.x",
+    "eslint-plugin-prettier": "^3.1.2",
     "husky": "^4.2.1",
+    "knex-schema-builder": "^0.4.3",
     "lint-staged": "^10.0.7",
     "prettier": "^1.19.1",
     "react": "*",
     "react-dom": "*",
     "react-scripts": "^3.4.0",
     "rimraf": "^3.0.2",
-    "ts-node": "^8.6.2",
-    "typescript": "^3.7.5"
+    "typescript": "^3.7.5",
+    "webpack-node-externals": "^1.7.2"
   }
 }

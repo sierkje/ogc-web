@@ -1,0 +1,11 @@
+{
+  "administrator": {
+    "name": "Admin"
+  },
+  "editor": {
+    "name": "Editor"
+  },
+  "member": {
+    "name": "Member"
+  }
+}

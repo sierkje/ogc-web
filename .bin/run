@@ -1,0 +1,61 @@
+#!/usr/bin/env node
+
+// @ts-check
+const [command, ...args] = process.argv.slice(2)
+
+function onDone(error) {
+  if (error) {
+    console.log('Something went wrong...', '\n')
+    console.error(error)
+    process.exit(1)
+  }
+
+  process.exit(0)
+}
+
+async function printValidCommands() {
+  console.log(`Valid commands are "build", "dev", "serve", "clean", or "help"`)
+}
+
+async function printInvalidCommandWarning() {
+  if (command && command.trim()) {
+    console.log(`Unknown command "${command}".`)
+  } else {
+    console.log('No command provided.')
+  }
+  await printValidCommands()
+}
+
+function getScriptCommand() {
+  switch (command) {
+    case 'build': {
+      return require('./scripts/build')
+    }
+    case 'clean': {
+      return require('./scripts/clean')
+    }
+    case 'dev': {
+      return require('./scripts/dev')
+    }
+    case 'help': {
+      return printValidCommands
+    }
+    case 'prepare-db': {
+      return require('./scripts/prepare-db')
+    }
+    case 'serve': {
+      // return require('./scripts/serve')
+      console.log('Command "serve" is not yet available.')
+      return printValidCommands
+    }
+    default: {
+      return printInvalidCommandWarning
+    }
+  }
+}
+
+const runScript = getScriptCommand()
+
+runScript()
+  .then(onDone, onDone)
+  .catch(onDone)

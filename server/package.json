@@ -3,20 +3,35 @@
   "version": "0.1.0",
   "private": true,
   "main": "./build",
-  "babel": {
-    "presets": [
-      "@babel/env",
-      "@babel/preset-typescript"
+  "typings": "./src/index.ts",
+  "eslintConfig": {
+    "root": true,
+    "extends": [
+      "../eslint.config.ts.json",
+      "prettier",
+      "prettier/babel",
+      "prettier/typescript"
     ],
-    "plugins": [
-      "@babel/proposal-class-properties",
-      "@babel/proposal-object-rest-spread"
-    ]
+    "env": {
+      "es6": true,
+      "node": true
+    },
+    "rules": {
+      "prettier/prettier": "error"
+    }
   },
   "dependencies": {
+    "apollo-datasource": "^0.7.0",
+    "apollo-server-caching": "^0.5.1",
     "apollo-server-express": "^2.10.1",
     "express": "^4.17.1",
+    "googleapis": "^47.0.0",
     "graphql": "^14.6.0",
-    "ramda": "^0.27.0"
-  }
+    "helmet": "^3.21.3",
+    "knex": "^0.20.10",
+    "knex-tiny-logger": "^1.1.0",
+    "ramda": "^0.27.0",
+    "sqlite3": "^4.1.1"
+  },
+  "devDependencies": {}
 }

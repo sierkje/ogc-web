@@ -1,0 +1,391 @@
+{
+  "schema": {
+    "files": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "increments",
+          "primary": true
+        },
+        {
+          "name": "uuid",
+          "type": "string",
+          "length": 128,
+          "unique": true
+        },
+        {
+          "name": "folder",
+          "type": "string",
+          "length": 127
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "length": 127
+        },
+        {
+          "name": "mime",
+          "type": "string",
+          "length": 255
+        },
+        {
+          "name": "size",
+          "type": "bigInteger",
+          "precision": 20
+        }
+      ],
+      "timestamps": true,
+      "indexes": [
+        {
+          "name": "files__uuid",
+          "columns": "uuid",
+          "unique": true
+        },
+        {
+          "name": "files__folder__filename",
+          "columns": ["folder", "filename"],
+          "unique": true
+        }
+      ],
+      "foreign_keys": []
+    },
+    "post_files": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "increments",
+          "primary": true
+        },
+        {
+          "name": "post_revision_uuid",
+          "type": "string",
+          "length": 128
+        },
+        {
+          "name": "file_uuid",
+          "type": "string",
+          "length": 128
+        }
+      ],
+      "timestamps": false,
+      "indexes": [
+        {
+          "name": "post_files__post_revision_uuid__file_uuid",
+          "columns": ["post_revision_uuid", "file_uuid"],
+          "unique": true
+        }
+      ],
+      "foreign_keys": [
+        {
+          "columns": "post_revision_uuid",
+          "foreign_table": "post_revisions",
+          "foreign_columns": "uuid"
+        },
+        {
+          "columns": "file_uuid",
+          "foreign_table": "files",
+          "foreign_columns": "uuid"
+        },
+        {
+          "columns": "image_uuid",
+          "foreign_table": "files",
+          "foreign_columns": "uuid"
+        }
+      ]
+    },
+    "post_revisions": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "increments",
+          "primary": true
+        },
+        {
+          "name": "uuid",
+          "type": "string",
+          "length": 128,
+          "unique": true
+        },
+        {
+          "name": "post_uuid",
+          "type": "string",
+          "length": 128
+        },
+        {
+          "name": "user_uuid",
+          "type": "string",
+          "length": 128
+        },
+        {
+          "name": "title",
+          "type": "string",
+          "length": 255
+        },
+        {
+          "name": "body",
+          "type": "longtext"
+        },
+        {
+          "name": "summary",
+          "type": "string",
+          "length": 128
+        },
+        {
+          "name": "image_uuid",
+          "type": "string",
+          "length": 128
+        },
+        {
+          "name": "status",
+          "type": "boolean"
+        }
+      ],
+      "timestamps": true,
+      "indexes": [
+        {
+          "name": "post_revisions__uuid",
+          "columns": "uuid",
+          "unique": true
+        },
+        {
+          "name": "post_revisions__post_uuid",
+          "columns": "post_uuid",
+          "unique": false
+        }
+      ],
+      "foreign_keys": [
+        {
+          "columns": "user_uuid",
+          "foreign_table": "users",
+          "foreign_columns": "uuid"
+        },
+        {
+          "columns": "post_uuid",
+          "foreign_table": "posts",
+          "foreign_columns": "uuid"
+        },
+        {
+          "columns": "image_uuid",
+          "foreign_table": "files",
+          "foreign_columns": "uuid"
+        }
+      ]
+    },
+    "post_slugs": {
+      "columns": [
+        {
+          "name": "slug",
+          "type": "string",
+          "primary": true,
+          "length": 255
+        },
+        {
+          "name": "post_uuid",
+          "type": "string",
+          "length": 128
+        }
+      ],
+      "timestamps": false,
+      "indexes": [],
+      "foreign_keys": [
+        {
+          "columns": "post_uuid",
+          "foreign_table": "posts",
+          "foreign_columns": "uuid"
+        }
+      ]
+    },
+    "posts": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "increments",
+          "primary": true
+        },
+        {
+          "name": "uuid",
+          "type": "string",
+          "length": 128,
+          "unique": true
+        },
+        {
+          "name": "revision_uuid",
+          "type": "string",
+          "length": 128,
+          "unique": true
+        },
+        {
+          "name": "slug",
+          "type": "string",
+          "length": 255,
+          "unique": true
+        },
+        {
+          "name": "type",
+          "type": "string",
+          "length": 128
+        },
+        {
+          "name": "status",
+          "type": "boolean"
+        }
+      ],
+      "timestamps": false,
+      "indexes": [
+        {
+          "name": "posts__uuid",
+          "columns": "uuid",
+          "unique": true
+        },
+        {
+          "name": "posts__revision_uuid",
+          "columns": "revision_uuid",
+          "unique": true
+        },
+        {
+          "name": "posts__slug",
+          "columns": "slug",
+          "unique": true
+        }
+      ],
+      "foreign_keys": [
+        {
+          "columns": "revision_uuid",
+          "foreign_table": "post_revisions",
+          "foreign_columns": "uuid"
+        },
+        {
+          "columns": "slug",
+          "foreign_table": "post_slugs",
+          "foreign_columns": "slug"
+        }
+      ]
+    },
+    "posts_homepage": {
+      "columns": [
+        {
+          "name": "post_uuid",
+          "type": "string",
+          "primary": true,
+          "length": 128
+        },
+        {
+          "name": "weight",
+          "type": "integer"
+        },
+        {
+          "name": "pinned",
+          "type": "boolean"
+        }
+      ],
+      "timestamps": false,
+      "indexes": [],
+      "foreign_keys": [
+        {
+          "columns": "post_uuid",
+          "foreign_table": "posts",
+          "foreign_columns": "uuid"
+        }
+      ]
+    },
+    "user_roles": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "increments",
+          "primary": true
+        },
+        {
+          "name": "user_uuid",
+          "type": "string",
+          "length": 128
+        },
+        {
+          "name": "role",
+          "type": "string",
+          "length": 64
+        }
+      ],
+      "timestamps": false,
+      "indexes": [
+        {
+          "name": "user_roles__user_uuid__role",
+          "columns": ["user_uuid", "role"],
+          "unique": true
+        }
+      ],
+      "foreign_keys": [
+        {
+          "columns": "user_uuid",
+          "foreign_table": "users",
+          "foreign_columns": "uuid"
+        }
+      ]
+    },
+    "users": {
+      "columns": [
+        {
+          "name": "id",
+          "type": "increments",
+          "primary": true
+        },
+        {
+          "name": "uuid",
+          "type": "string",
+          "length": 128,
+          "unique": true
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "length": 60,
+          "unique": true
+        },
+        {
+          "name": "nick",
+          "type": "string",
+          "length": 64,
+          "unique": true
+        },
+        {
+          "name": "email",
+          "type": "string",
+          "length": 254,
+          "unique": true
+        },
+        {
+          "name": "password",
+          "type": "string",
+          "length": 128
+        },
+        {
+          "name": "loggedin_at",
+          "type": "dateTime"
+        },
+        {
+          "name": "status",
+          "type": "boolean"
+        }
+      ],
+      "timestamps": true,
+      "indexes": [
+        {
+          "name": "users__uuid",
+          "columns": "uuid",
+          "unique": true
+        },
+        {
+          "name": "users__name",
+          "columns": "name",
+          "unique": true
+        },
+        {
+          "name": "users__nick",
+          "columns": "nick",
+          "unique": true
+        }
+      ],
+      "foreign_keys": []
+    }
+  }
+}

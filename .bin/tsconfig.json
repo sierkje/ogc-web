@@ -1,4 +1,0 @@
-{
-  "extends": "../config/ts.json",
-  "include": ["scripts"]
-}

@@ -1,8 +1,0 @@
-#!/usr/bin/env node
-
-// @ts-check
-
-require('ts-node').register()
-
-require('./scripts/clean').cleanAll()
-require('./scripts/build').buildAll()
